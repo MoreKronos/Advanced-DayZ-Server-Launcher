@@ -11,6 +11,7 @@ Before you begin, ensure you have the following:
 - A Windows computer/server
 - A [Steam](https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe) account (Steam will auto-download when you click the link)
 - [Notepad++](https://notepad-plus-plus.org/downloads/) installed
+- A fresh install of DayZ Server.
 
 ## Steps
 
