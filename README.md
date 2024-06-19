@@ -35,7 +35,7 @@ Locate Server Files:
 ### 3. Download the startup Script
 
 Download the Batch File:
-- [Download launcher.bat](https://github.com/your-repository/launcher.bat)
+- [Download launcher.bat](https://github.com/MoreKronos/Advanced-DayZ-Server-Launcher/archive/refs/tags/Dayz.zip)
 - Place `launcher.bat` inside your DayZ server folder (e.g., `C:\Program Files (x86)\Steam\steamapps\common\DayZServer`).
 
 ### 4. Configure the Server
