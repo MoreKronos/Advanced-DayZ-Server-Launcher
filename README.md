@@ -78,7 +78,10 @@ You should now have a functional DayZ Standalone server. You can further customi
 
 ## Additional Resources
 
-- [DayZ Server Documentation](https://community.bistudio.com/wiki/DayZ:Server_Configuration)
+- [DayZ Server Documentation 1](https://write.corbpie.com/installing-and-setting-up-a-dayz-standalone-server-on-windows-server-2016-guide/)
+- [DayZ Server Documentation 2](https://pointandshooter.co.uk/dayz/how-to-setup-a-local-dayz-server-on-pc)
+  
+- [DayZ Server serverDZ.cfg Documentation](https://community.bistudio.com/wiki/DayZ:Server_Configuration)
 
 ## License
 
