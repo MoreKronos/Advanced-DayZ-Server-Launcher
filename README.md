@@ -82,4 +82,4 @@ You should now have a functional DayZ Standalone server. You can further customi
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - [see the LICENSE file for details.](https://github.com/MoreKronos/Advanced-DayZ-Server-Launcher?tab=MIT-1-ov-file) 
