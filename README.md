@@ -22,7 +22,6 @@ Before you begin, ensure you have the following:
 
 ### 2. Download and Install the DayZ Server
 
-Download and Install the DayZ Server:
 - Open Steam.
 - Navigate to LIBRARY > TOOLS.
 - Find DayZ Server in the list, right-click it, and click Install game.
@@ -34,7 +33,7 @@ Locate Server Files:
 ### 3. Download the startup Script
 
 Download the Batch File:
-- [Download launcher.bat](https://github.com/MoreKronos/Advanced-DayZ-Server-Launcher/archive/refs/tags/Dayz.zip)
+- [Download launcher.bat](https://github.com/MoreKronos/Advanced-DayZ-Server-Launcher/releases)
 - Place `launcher.bat` inside your DayZ server folder (e.g., `C:\Program Files (x86)\Steam\steamapps\common\DayZServer`).
 
 ### 4. Configure the Server
