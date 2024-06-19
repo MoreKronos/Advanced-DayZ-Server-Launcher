@@ -17,7 +17,6 @@ Before you begin, ensure you have the following:
 
 ### 1. Download and Install Steam
 
-Download and Install Steam:
 - [Download Steam](https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe)
 - Follow the installation instructions and log in with your Steam account.
 
