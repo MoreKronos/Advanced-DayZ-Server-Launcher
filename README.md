@@ -32,7 +32,7 @@ Download and Install the DayZ Server:
 Locate Server Files:
 - Navigate to the installation directory, by default: `C:\Program Files (x86)\Steam\steamapps\common\DayZServer`.
 
-### 3. Create a Startup Script
+### 3. Download the startup Script
 
 Download the Batch File:
 - [Download launcher.bat](https://github.com/your-repository/launcher.bat)
