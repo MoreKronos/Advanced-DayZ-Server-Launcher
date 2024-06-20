@@ -64,7 +64,7 @@ Run the Batch File:
 ### 7. Troubleshooting Common Errors
 
 - **VCRuntime140.dll is missing**: Install the x64 Visual C++ Redistributable from [here](https://www.microsoft.com/en-us/download/details.aspx?id=52685).
-- **XAPOFX1_5.dll and/or X3DAudio1_7.dll are missing**: Install the DirectX End-User Runtime from [here](https://www.microsoft.com/en-us/download/details.aspx?id=8109).
+- **XAPOFX1_5.dll and/or X3DAudio1_7.dll are missing**: Install the DirectX End-User Runtime from [here](https://www.microsoft.com/en-ca/download/details.aspx?id=35).
 
 ### 8. Connecting to Your Server
 
