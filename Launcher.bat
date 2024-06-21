@@ -31,6 +31,7 @@ if exist "%markerFile%" (
 )
 
 :DayZServerSetup
+REM Clear screen
 cls
 REM Prompt user whether to set up DayZ server configuration 
 echo It's recommended to use the DayZ setup script to configure your server.
@@ -41,12 +42,16 @@ if /i "%Setup%"=="Y" (
     echo Setting up DayZ Server configuration...
     goto DayZServerConfiguration
 ) else if /i "%Setup%"=="N" (
-    echo [%date% %time%] User chose not to use DayZServerSetup. It's recommended to use the DayZ setup script. >> "%setupLogFile%"
+	REM Clear screen
+	cls
+    echo You chose not to use DayZServerSetup. It's recommended to use the DayZ setup script.
     echo Creating setup_marker.txt to prevent setup prompt on next launch...
-    echo This file prevents the setup prompt from appearing on the next launch. You can run the setup script manually. > "%markerFile%"
+    echo This file prevents the setup prompt from appearing on the next launch.
+	echo To ever use the setup again find and delete the setup_marker.txt
     echo [%date% %time%] Created setup_marker.txt >> "%setupLogFile%"
-    timeout /t 5 >nul
-    cls
+	echo [%date% %time%] User chose to decline setup >> "%setupLogFile%" 
+    timeout /t 10 >nul
+
     goto Configuration
 ) else (
     echo Error: Invalid choice. Please select either 'Y' or 'N'.
@@ -105,7 +110,8 @@ echo ---
 echo Configuration cleanup completed
 echo ---
 echo Press any key to continue
-pause >nul 
+pause >nul
+REM Clear screen 
 cls
 
 echo Creating logs folder directory if not found
@@ -162,11 +168,12 @@ if not exist "%serverLocation%server_profile\serverDZ.cfg" (
 )
 timeout /t 1 >nul
 
-echo ---
+echo :
 echo Press any key to continue
 pause >nul
 
 :completeSetup
+REM Clear screen
 cls
 echo Setup complete.
 
@@ -184,14 +191,11 @@ REM Clear Screen
 cls
 REM Title Name
 title Configuration
+echo Configuration:
 REM Check if server.log exists and delete it
 if exist "%logFile%" (
     del /q "%logFile%"
 )
-
-REM This section handles the server configuration settings
-cls
-echo Configuration:
 
 REM Prompt user to enter server name
 :serverName
