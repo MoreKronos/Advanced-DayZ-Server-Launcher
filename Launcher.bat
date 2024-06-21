@@ -43,9 +43,8 @@ if /i "%Setup%"=="Y" (
 ) else if /i "%Setup%"=="N" (
     echo [%date% %time%] User chose not to use DayZServerSetup. It's recommended to use the DayZ setup script. >> "%setupLogFile%"
     echo Creating setup_marker.txt to prevent setup prompt on next launch...
-    echo This file prevents the setup prompt from appearing on the next launch. You can run the setup script manually.
+    echo This file prevents the setup prompt from appearing on the next launch. You can run the setup script manually. > "%markerFile%"
     echo [%date% %time%] Created setup_marker.txt >> "%setupLogFile%"
-    echo DO NOT DELETE THIS FILE >> "%serverLocation%setup_marker.txt"
     timeout /t 5 >nul
     cls
     goto Configuration
@@ -181,7 +180,10 @@ timeout /t 3 >nul
 goto Configuration
 
 :Configuration
+REM Clear Screen
 cls
+REM Title Name
+title Configuration
 REM Check if server.log exists and delete it
 if exist "%logFile%" (
     del /q "%logFile%"
@@ -193,7 +195,6 @@ echo Configuration:
 
 REM Prompt user to enter server name
 :serverName
-
 set /p "serverName=Enter server name: "
 if "%serverName%"=="" (
     echo Error: Server name cannot be empty.
@@ -207,20 +208,20 @@ REM Prompt user to enter server port
 set /p "serverPort=Enter server port (press Enter to use the default port = 2302): "
 if "%serverPort%"=="" (
     set "serverPort=2302"
-    echo [%date% %time%] Server port set to default: %serverPort% >> "%logFile%"
 ) else (
     echo [%date% %time%] Server port set to: %serverPort% >> "%logFile%"
 )
+echo [%date% %time%] Server port set to: %serverPort% >> "%logFile%"
 
 REM Prompt user to enter CPU count
 :serverCPU
 set /p "serverCPU=Enter CPU count (press Enter to use the default CPU count = 2): "
 if "%serverCPU%"=="" (
     set "serverCPU=2"
-    echo [%date% %time%] CPU count set to default: %serverCPU% >> "%logFile%"
 ) else (
     echo [%date% %time%] CPU count set to: %serverCPU% >> "%logFile%"
 )
+echo [%date% %time%] CPU count set to: %serverCPU% >> "%logFile%"
 
 REM Prompt user to enter restart hours
 :serverRestart
@@ -244,12 +245,12 @@ if %restartHours% equ 1 (
 ) else (
     set "serverRestartLog=%restartHours% hours"
 )
-echo [%date% %time%] User entered restart time: %serverRestartLog% >> "%logFile%"
+echo [%date% %time%] Restart time set to: %serverRestartLog% >> "%logFile%"
 
-goto serverLocationInput
+goto serverLocation
 
 REM Display found server location in prompt
-:serverLocationInput
+:serverLocation
 set "serverLocationInput="
 set /p "serverLocationInput=Enter server location (press Enter to use found directory = %serverLocation%): "
 
@@ -257,43 +258,123 @@ REM Validate server location input
 if not "%serverLocationInput%"=="" (
     if exist "%serverLocationInput%" (
         set "serverLocation=%serverLocationInput%"
-        goto setSettings
+		echo [%date% %time%] Server location set to: %serverLocation% >> "%logFile%"
+        goto serverMods
     ) else (
         echo Error: Directory "%serverLocationInput%" not found. Please enter a valid directory.
         timeout /t 5 >nul
-        goto serverLocationInput
+        goto serverLocation
     )
 ) else (
-    goto setSettings
+	echo [%date% %time%] Server location set to: %serverLocation% >> "%logFile%"
+    goto folderCheck
 )
 
-REM Set title for terminal
-:setSettings
-echo [%date% %time%] Server location set to: %serverLocation% >> "%logFile%"
+:folderCheck
+REM Check if there are any subfolders inside the "mods" folder
+if exist "%serverLocation%\mods" (
+    dir /b /ad "%serverLocation%\mods\*" >nul 2>&1
+    if errorlevel 1 (
+        REM No subfolders found inside "mods" folder
+        echo No mods found inside mods folder. Skipping serverMods tab.
+        echo [%date% %time%] No mods found inside mods folder. Skipping serverMods. >> "%logFile%"
+        goto Reconfiguration
+    ) else (
+        REM Subfolders found, proceed with serverMods script
+		echo [%date% %time%] Mods found continuing to prompt>> "%logFile%"
+        goto serverMods
+    )
+) else (
+    REM "mods" folder not found
+    echo Mods folder not found. Skipping serverMods tab.
+    echo [%date% %time%] Mods folder not found. Skipping serverMods. >> "%logFile%"
+    goto Reconfiguration
+)
 
-title %serverName%
-
-goto serverRestartConfirm
-
-REM Prompt user to confirm server restart
-:serverRestartConfirm
+:serverMods
+REM Clear screen
 cls
+
+REM clear all text in the mods.cfg file
+type nul > "%serverLocation%\mods.cfg"
+
+REM Create keys folder if it doesn't exist
+if not exist "%serverLocation%\keys" (
+    mkdir "%serverLocation%\keys"
+    REM Log the creation of keys folder
+    echo [%date% %time%] Created keys folder >> "%logFile%"
+)
+
+REM Prompt user to add all mods to mods.cfg
+echo Mods found.
+
+:serverMods_Prompt
+set /p "addMods=Do you want to add all mods to mods.cfg and all .bikey files to Keys folder? (Y/N): "
+
+REM Validate user input
+REM Use /I for case-insensitive comparison
+if /i "%addMods%"=="Y" (
+    REM Create an empty mods.cfg file
+    type nul > "%serverLocation%\mods.cfg"
+
+    REM Loop through each subfolder in the mods directory and write folder names to mods.cfg
+    for /D %%F in ("%serverLocation%\mods\*") do (
+        echo %%~nxF >> "%serverLocation%\mods.cfg"
+    )
+
+    REM Log the operation
+    echo [%date% %time%] Successfully added all mods to mods.cfg and Keys folder >> "%logFile%"
+
+    REM Search for .bikey files in nested "mods" folders and copy them to "%serverLocation%\keys"
+    setlocal enabledelayedexpansion
+    for /R "%serverLocation%\mods" %%G in (*.bikey) do (
+        echo Copying %%~nxF to keys folder outside of mods...
+        copy "%%G" "%serverLocation%\keys\"
+    )
+    endlocal
+) else if /i "%addMods%"=="N" (
+    REM User chose not to add all mods to mods.cfg
+    echo User chose not to add all mods to mods.cfg and .bikey files.
+
+    REM Log user decision
+    echo [%date% %time%] User chose not to add all mods to mods.cfg and Keys folder >> "%logFile%"
+    
+    REM Proceed to the next section or label after handling 'N'
+    goto Reconfiguration
+) else (
+    REM Invalid choice handling
+    echo Error: Invalid choice. Please enter either Y or N.
+    timeout /t 5 >nul
+    goto serverMods_Prompt
+)
+
+echo Press any key to continue
+pause >nul
+
+REM Reconfigure prompt
+:Reconfiguration
+REM Clear screen
+cls
+
 echo Do you want to reconfigure the settings? (Y/N)
 set /p reconfigure=
 if /i "%reconfigure%"=="Y" (
     goto Configuration
 ) else if /i "%reconfigure%"=="N" (
     echo [%date% %time%] User chose not to reconfigure settings. >> "%logFile%"
-    goto startServer_process
+    goto startServer_Prompt
 ) else (
     echo Error: Invalid choice. Please select either 'Y' or 'N'.
     timeout /t 5 >nul
     echo [%date% %time%] User chose to reconfigure settings. >> "%logFile%"
-    goto serverRestartConfirm
+    goto Configuration
 )
 
-:startServer_process
+:startServer_Prompt
+REM Clear screen
 cls
+REM Title Name
+title Starting Server
 echo Are you sure you want to start %serverName% Dayz Server? (Y/N)
 set /p confirm=
 if /i "%confirm%"=="Y" (
@@ -303,14 +384,18 @@ if /i "%confirm%"=="Y" (
     echo [%date% %time%] User chose to abort server startup. >> "%logFile%"
     goto exit
 ) else (
+	REM Clear screen
+	cls
     echo Error: Invalid choice. Please select either 'Y' or 'N'.
     timeout /t 5 >nul
-    goto startServer_process
+    goto startServer_Prompt
 )
 
 :startServer
 REM Clear screen
 cls
+REM Title Name
+title %serverName% 
 REM Log server startup
 echo (%time%) Starting %serverName% DayZ server
 echo (%date% %time%) %serverName% Server started >> "%logFile%"
@@ -319,11 +404,11 @@ REM Display mods.cfg contents if it exists
 echo Mods currently loaded:
 echo ------------------------
 if exist "%serverLocation%\mods.cfg" (
-    type "%serverLocation%\mods.cfg"
+	type "%serverLocation%\mods.cfg"
 ) else (
-    echo No mods enabled.
+    echo No mods found/enabled.
 )
-echo:
+REM Force text to not overlap the line
 echo ------------------------
 
 REM Kill DayZ server process if it exists
@@ -358,10 +443,11 @@ title Exiting Launcher
 REM Set countdown for exiting
 set countdown=5
 :countdownloop2
-REM Log countdown
-echo Exiting in (%countdown%) >> logs\Batch_Launcher.log
 REM Clear screen
 cls
+REM Log countdown
+echo Exiting in (%countdown%) >> logs\Batch_Launcher.log
+
 echo Server startup aborted
 echo Exiting in %countdown% seconds...
 set /a countdown-=1
@@ -371,5 +457,7 @@ if %countdown% gtr -1 (
 ) else (
 	REM Clear screen
 	cls
+	REM exit the script 
+	echo Launcher Was Abprted >> logs\Batch_Launcher.log
     exit /b
 )
