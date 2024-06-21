@@ -188,6 +188,7 @@ goto Configuration
 
 :Configuration
 REM Clear Screen
+
 cls
 REM Title Name
 title Configuration
@@ -298,10 +299,6 @@ if exist "%serverLocation%\mods" (
 :serverMods
 REM Clear screen
 cls
-
-REM clear all text in the mods.cfg file
-type nul > "%serverLocation%\mods.cfg"
-
 REM Create keys folder if it doesn't exist
 if not exist "%serverLocation%\keys" (
     mkdir "%serverLocation%\keys"
@@ -314,6 +311,8 @@ echo Mods found.
 
 :serverMods_Prompt
 set /p "addMods=Do you want to add all mods to mods.cfg and all .bikey files to Keys folder? (Y/N): "
+REM clear all text in the mods.cfg file
+type nul > "%serverLocation%\mods.cfg"
 
 REM Validate user input
 REM Use /I for case-insensitive comparison
@@ -431,7 +430,7 @@ REM Kill server process
 taskkill /im DayZServer_x64.exe /F
 
 REM Log server restart
-echo (%date% %time%) Server restarted >> "%logFile%"
+echo (%date% %time%) Server restarted >> "%logFile%" 
 
 REM Wait before restarting server
 title Restarting Server
