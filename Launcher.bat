@@ -462,6 +462,6 @@ if %countdown% gtr -1 (
 	REM Clear screen
 	cls
 	REM exit the script 
-	echo Launcher Was Abprted >> logs\Batch_Launcher.log
+	echo Launcher Was Aborted >> logs\Batch_Launcher.log
     exit /b
 )
