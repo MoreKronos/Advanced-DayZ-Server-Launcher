@@ -87,4 +87,4 @@ This project is licensed under the MIT License - [see the LICENSE file for detai
 
 ## What's coming after (Pre-Release-v1.0.5)
 
-to be honest i might not update anymore... the reason is the batch script is the best option and i have no time to convert it to diffrent coding languages, feel free to msg me on discord at: "itskronosyt" if you want me to add any new features.
+to be honest i might not update anymore... the reason is the batch script is the best option and i have no time to convert it to different coding languages, feel free to msg me on discord at: "its kronos" if you want me to add any new features.
